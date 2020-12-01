@@ -5,6 +5,7 @@ import io.ktor.features.*
 import io.ktor.gson.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -30,6 +31,8 @@ fun Application.module() {
                     val numTotalFirstName = sumTotalFirstName(firstName)
                     val numTotalDay = Date().date + Date().day.plus(1)
                     val numTotalForecast = numTotalFirstName + numTotalDay
+                    val sdf = SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm")
+                    val dateTime = sdf.format(System.currentTimeMillis())
 
                     val forecast = Forecast(
                         firstName = firstName,
@@ -37,6 +40,7 @@ fun Application.module() {
                         numTotalDay = numTotalDay,
                         numTotalForecast = numTotalForecast,
                         forecastMessage = forecastMessage(numTotalForecast),
+                        dateTime = dateTime,
                     )
                     response.forecast = forecast
                     response.success = true
@@ -62,6 +66,7 @@ data class Forecast(
     val numTotalDay: Int? = null,
     val numTotalForecast: Int? = null,
     val forecastMessage: String? = null,
+    val dateTime: String? = null,
 )
 
 fun sumTotalFirstName(firstName: String): Int {
